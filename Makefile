@@ -16,7 +16,7 @@ DATABASE = turnaround
 MYSQL = mysql $(DATABASE) $(MYSQLFLAGS)
 
 GTFSVERSION = 20150906
-MONTH = 2015-10
+MONTH = 2015-11
 
 CALL_FIELDS = vehicle_id, \
 	trip_index, \
@@ -52,7 +52,7 @@ stats/$(MONTH)-evt.csv: $(routes)
 	csvstack -t $^ > $@
 
 $(routes): stats/evt/%.tsv: sql/evt_route.sql | stats/evt
-	{ echo "SET @the_month=\'$(MONTH)-01\', @the_route=\'$*\'\;" ; cat $^ ; } | \
+	{ echo "SET @the_month='$(MONTH)-01', @the_route='$*';" ; cat $^ ; } | \
 	$(MYSQL) > $@
 
 routes.txt: gtfs/$(GTFSVERSION)/routes.txt
@@ -64,7 +64,7 @@ routes.txt: gtfs/$(GTFSVERSION)/routes.txt
 cewt: stats/$(MONTH)-cewt.csv
 
 stats/$(MONTH)-cewt.csv: sql/ewt_conservative.sql
-	{ echo "SET @the_month=\'$(MONTH)-01\';" ; cat $^ ; } | \
+	{ echo "SET @the_month='$(MONTH)-01';" ; cat $^ ; } | \
 	$(MYSQL)
 	$(MYSQL) -e "SELECT * FROM cewt_avg" > $@
 
@@ -144,21 +144,22 @@ stats/$(MONTH)-bunching.csv: sql/date_trips.sql sql/headway_observed.sql sql/hea
 # Insert calls data for a particular month
 #
 init-month: init-$(MONTH)
-init-$(MONTH): init-%: mysql-calls-% mysql-schedule-%
-
-# mysql-calls-%: calls/%.tsv
-# 	$(MYSQL) --local-infile \
-# 		-e "LOAD DATA LOCAL INFILE '$(<)' INTO TABLE calls \
-# 		FIELDS TERMINATED BY '\t' ($(CALL_FIELDS))"
+# init-$(MONTH): init-%: mysql-calls-% mysql-schedule-%
+init-$(MONTH): init-%: mysql-schedule-%
 
 mysql-calls-%: calls/%.tsv
 	$(MYSQL) --local-infile \
 		-e "LOAD DATA LOCAL INFILE '$(<)' INTO TABLE calls \
-		FIELDS TERMINATED BY '\t'"
+		FIELDS TERMINATED BY '\t' ($(CALL_FIELDS))"
+
+# mysql-calls-%: calls/%.tsv
+# 	$(MYSQL) --local-infile \
+# 		-e "LOAD DATA LOCAL INFILE '$(<)' INTO TABLE calls \
+# 		FIELDS TERMINATED BY '\t'"
 
 mysql-schedule-%: schedule/schedule_%.tsv
 	$(MYSQL) --local-infile \
-		-e "LOAD DATA LOCAL INFILE '$(<)' INTO TABLE schedule_hour \
+		-e "LOAD DATA LOCAL INFILE '$(<)' INTO TABLE schedule_hours \
 		FIELDS TERMINATED BY '\t' ($(SCHEDULE_FIELDS))"
 
 .INTERMEDIARY: %.tsv
@@ -172,8 +173,8 @@ mysql-schedule-%: schedule/schedule_%.tsv
 calls/%.tsv.xz: | calls
 	curl -o $@ $(SERVER)/bus_calls/$(word 1,$(subst -, ,$*))/calls_$*.tsv.xz
 
-schedule/%.tsv.xz: | schedule
-	curl -o $@ $(SERVER)/bus_schedule/$*.tsv.xz
+# schedule/%.tsv.xz: | schedule
+# 	curl -o $@ $(SERVER)/bus_schedule/$*.tsv.xz
 
 # Schedules available for 2014-08 to 2016-02
 # format: $(SERVER)/bus_schedule/YYYY/schedule_YYYY-MM.tsv.xz
@@ -183,10 +184,23 @@ schedule/schedule_%.tsv.xz: | schedule
 lookups/%.tsv.xz: | lookups
 	curl -o $@ $(SERVER)/bus_calls/$*.tsv.xz
 
-init: sql/create.sql
-	$(MYSQL) < $<
-	$(MYSQL) --local-infile -e "LOAD DATA LOCAL INFILE 'data/holidays.csv' \
-    IGNORE INTO TABLE ref_holidays FIELDS TERMINATED BY ',' (date, holiday)"
+# init: sql/create.sql
+# 	$(MYSQL) < $<
+# 	$(MYSQL) --local-infile -e "LOAD DATA LOCAL INFILE 'data/holidays.csv' \
+#     IGNORE INTO TABLE ref_holidays FIELDS TERMINATED BY ',' (date, holiday)"
+
+
+init: sql/create.sql lookups/rds_indexes.tsv lookups/trip_indexes.tsv
+		 $(MYSQL) < $<
+
+		 $(MYSQL) --local-infile \
+			 -e "LOAD DATA LOCAL INFILE 'lookups/rds_indexes.tsv' INTO TABLE rds_indexes \
+			 FIELDS TERMINATED BY '\t' (rds_index, route, direction, stop_id)"
+
+		 $(MYSQL) --local-infile \
+			 -e "LOAD DATA LOCAL INFILE 'lookups/trip_indexes.tsv' INTO TABLE trip_indexes \
+			 FIELDS TERMINATED BY '\t' (trip_index, gtfs_trip)"
+
 
 install:
 	pip install --user -r requirements.txt

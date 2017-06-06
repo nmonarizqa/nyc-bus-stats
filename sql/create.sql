@@ -253,6 +253,24 @@ CREATE TABLE IF NOT EXISTS perf_wtp (
   PRIMARY KEY (month, route_id, direction_id, stop_id, weekend, period)
 ) ENGINE=MyISAM;
 
+
+-- rds and trip indexes
+CREATE TABLE IF NOT EXISTS rds_indexes (
+  rds_index INTEGER NOT NULL,
+  route VARCHAR(5) NOT NULL,
+  direction CHAR(1) NOT NULL,
+  stop_id INTEGER NOT NULL,
+  PRIMARY KEY (rds_index),
+  KEY r (route, direction, stop_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS trip_indexes (
+  trip_index INT(11) NOT NULL,
+  gtfs_trip VARCHAR(64) DEFAULT NULL,
+  PRIMARY KEY (trip_index),
+  KEY gtfs_trip (gtfs_trip)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- All day is divided into five parts.
 DROP FUNCTION IF EXISTS day_period;
 CREATE FUNCTION day_period (d TIME)

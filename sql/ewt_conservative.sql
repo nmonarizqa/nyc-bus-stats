@@ -7,7 +7,7 @@ CREATE TABLE missing_calls (
     `trip_index` int(11) NOT NULL,
     `rds_index` INTEGER NOT NULL,
     `datetime` datetime NOT NULL,
-    KEY a (`trip_index`, `rds_index`, `date`)
+    KEY a (`trip_index`, `rds_index`, `datetime`)
 );
 
 INSERT INTO missing_calls

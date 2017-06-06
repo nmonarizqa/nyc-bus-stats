@@ -4,7 +4,8 @@ BASE = http://web.mta.info/developers/data
 
 files = routes shapes stop_times stops trips
 
-GTFSVERSION ?= $(shell date +"%Y%m%d")
+#GTFSVERSION ?= $(shell date +"%Y%m%d")
+GTFSVERSION = 20151101
 
 GTFSES = $(addprefix google_transit_,bronx brooklyn manhattan queens staten_island busco)
 
@@ -12,7 +13,7 @@ NYCTFILES = $(foreach x,bronx brooklyn manhattan queens staten_island,gtfs/$(GTF
 
 GTFSFILES = $(foreach x,$(files),gtfs/$(GTFSVERSION)/$x.txt)
 
-.PHONY: gtfs 
+.PHONY: gtfs
 
 gtfs: $(GTFSFILES)
 

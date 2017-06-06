@@ -1,0 +1,52 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'i',
+1 verbose cli   'andrewharvey/gtfs2geojson' ]
+2 info using npm@1.3.10
+3 info using node@v0.10.25
+4 verbose cache add [ 'andrewharvey/gtfs2geojson', null ]
+5 verbose cache add name=undefined spec="andrewharvey/gtfs2geojson" args=["andrewharvey/gtfs2geojson",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'andrewharvey/gtfs2geojson',
+6 verbose parsed url   path: 'andrewharvey/gtfs2geojson',
+6 verbose parsed url   href: 'andrewharvey/gtfs2geojson' }
+7 silly makeCacheDir cache dir uid, gid [ 0, 0 ]
+8 silly lockFile 62f33621-andrewharvey-gtfs2geojson andrewharvey/gtfs2geojson
+9 verbose lock andrewharvey/gtfs2geojson /root/.npm/62f33621-andrewharvey-gtfs2geojson.lock
+10 info maybeGithub Attempting andrewharvey/gtfs2geojson from git://github.com/andrewharvey/gtfs2geojson
+11 silly lockFile 0b500361-ub-com-andrewharvey-gtfs2geojson git://github.com/andrewharvey/gtfs2geojson
+12 verbose lock git://github.com/andrewharvey/gtfs2geojson /root/.npm/0b500361-ub-com-andrewharvey-gtfs2geojson.lock
+13 verbose addRemoteGit [ 'git://github.com/andrewharvey/gtfs2geojson', 'master' ]
+14 silly lockFile 0b500361-ub-com-andrewharvey-gtfs2geojson git://github.com/andrewharvey/gtfs2geojson
+15 silly lockFile 0b500361-ub-com-andrewharvey-gtfs2geojson git://github.com/andrewharvey/gtfs2geojson
+16 info maybeGithub Attempting andrewharvey/gtfs2geojson from git+ssh://git@github.com:andrewharvey/gtfs2geojson
+17 silly lockFile dc3d82e3-ub-com-andrewharvey-gtfs2geojson git+ssh://git@github.com:andrewharvey/gtfs2geojson
+18 verbose lock git+ssh://git@github.com:andrewharvey/gtfs2geojson /root/.npm/dc3d82e3-ub-com-andrewharvey-gtfs2geojson.lock
+19 verbose addRemoteGit [ 'git@github.com:andrewharvey/gtfs2geojson', 'master' ]
+20 silly lockFile 77b69105-ub-com-andrewharvey-gtfs2geojson git@github.com:andrewharvey/gtfs2geojson
+21 silly lockFile 62f33621-andrewharvey-gtfs2geojson andrewharvey/gtfs2geojson
+22 silly lockFile 62f33621-andrewharvey-gtfs2geojson andrewharvey/gtfs2geojson
+23 error addLocal Could not install andrewharvey/gtfs2geojson
+24 error Error: ENOENT, stat 'andrewharvey/gtfs2geojson'
+25 error If you need help, you may report this log at:
+25 error     <http://github.com/isaacs/npm/issues>
+25 error or email it to:
+25 error     <npm-@googlegroups.com>
+26 error System Linux 3.4.0+
+27 error command "/usr/bin/nodejs" "/usr/bin/npm" "i" "andrewharvey/gtfs2geojson"
+28 error cwd /mnt/c/Users/Nurvirta/Documents/GitHub/nyc-bus-stats2
+29 error node -v v0.10.25
+30 error npm -v 1.3.10
+31 error path andrewharvey/gtfs2geojson
+32 error code ENOENT
+33 error errno 34
+34 verbose exit [ 34, true ]
